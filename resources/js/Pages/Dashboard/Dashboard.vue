@@ -1,12 +1,23 @@
 <template>
     <dash-layout>
         <v-container>
-            Halo
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos mollitia et officiis nostrum deleniti atque ipsum omnis illum, fugiat natus voluptatem dolore? Nisi aperiam ex molestiae eveniet aliquam! Assumenda, aliquid?
+            <v-row>
+                <v-col></v-col>
+            </v-row>
+            <v-row>
+                <v-col cols="12" sm="4">
+                    <v-card tile elevation="5">
+                        <v-card-text>
+                            <v-card-title>Halo {{route().current()}}</v-card-title>
+                        </v-card-text>
+                    </v-card>
+                </v-col>
+            </v-row>
         </v-container>
         <v-dialog 
             max-width="600"
             v-model="errors['403']"
+            v-if="errors['403']"
         >
             <v-card color="error" dark height="100" class="d-flex align-center">
                 <v-card-text class="d-flex align-center justify-center" fill-height>
@@ -22,6 +33,14 @@ import DashLayout from '../../Layout/DashLayout'
 export default {
     name: 'Dashboard',
     props: { errors: Object },
-    components: { DashLayout }
+    components: { DashLayout },
+    data: () => ({
+
+    }),
+    computed: {
+        route() {
+            return window.route
+        }
+    }
 }
 </script>
