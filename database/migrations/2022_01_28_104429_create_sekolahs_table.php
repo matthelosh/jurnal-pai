@@ -18,9 +18,9 @@ class CreateSekolahsTable extends Migration
             $table->string('npsn', 10);
             $table->string('nama_sekolah', 60);
             $table->string('nama_ks', 60);
-            $table->string('nip_ks', 26);
+            $table->string('nip_ks', 26)->nullable();
             $table->string('alamat', 191);
-            $table->string('email', 60);
+            $table->string('email', 60)->nullable();
             $table->string('telp', 20)->nullable();
             $table->string('website', 60)->nullable();
             $table->timestamps();

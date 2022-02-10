@@ -1,19 +1,14 @@
 <template>
     <v-app id="dash">
-        <v-app-bar app dense color="green darken-3" dark>
-            <v-app-bar-title>Dashboard</v-app-bar-title>
+        <v-app-bar app dense color="primary" dark>
+            <v-app-bar-title>{{ pageTitle ? pageTitle : 'Dashboard' }}</v-app-bar-title>
             <v-spacer></v-spacer>
             <v-app-bar-nav-icon @click="sidebar = !sidebar" class="hidden-sm-and-up"></v-app-bar-nav-icon>
         </v-app-bar>
         <v-navigation-drawer app class="prim-grad" v-model="sidebar">
-            <v-list color="#333333dd" dense class="py-1">
             <v-list-item class="white--text" dense >
-                <v-list-item-avatar class="my-0">
-                    <v-icon class="white--text">mdi-book-open</v-icon>
-                </v-list-item-avatar>
-                <v-list-item-title>JURNAL</v-list-item-title>
+                <v-list-item-title><h3>JURNAL PAI <small>KKG WAGIR</small></h3></v-list-item-title>
             </v-list-item>
-            </v-list>
             <v-divider class="white"></v-divider>
             <v-list dense>
                 <inertia-link as="v-list-item"
@@ -47,6 +42,7 @@
 <script>
 export default {
     name:'Dashboard',
+    props: {pageTitle: String },
     data: () => ({
         sidebar: true,
     }),
@@ -84,6 +80,6 @@ export default {
         height: 100%;
         content: '';
         position: absolute;
-        background-image: linear-gradient(to top right, rgba(0, 255, 187, 0.864), rgb(30, 112, 71));
+        background-image: linear-gradient(to bottom left, rgba(15, 174, 179, 0.933), rgb(32, 85, 184, 0.95));
     }
 </style>

@@ -1,5 +1,7 @@
 <?php
 namespace App\Http\Controllers;
+
+use App\Models\Sekolah;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 /*
@@ -15,6 +17,7 @@ use Inertia\Inertia;
 
     Route::get('/', [FrontController::class, 'home'])->name('home');
     Route::get('/tentang', [FrontController::class, 'about'])->name('about');
+    Route::get('/login', [FrontController::class, 'login'])->name('login');
 
     Route::middleware('auth:sanctum')->group(function(){
         Route::group(['prefix' => 'dashboard'], function(){
@@ -22,7 +25,7 @@ use Inertia\Inertia;
         });
 
         // admin
-        Route::group(['prefix' => 'admin'], function(){
+        Route::prefix('admin')->middleware('role:admin')->group(function() {
             Route::group(['prefix' => 'jurnal'], function(){
                 Route::get('/', [DashController::class, 'index'])->name('admin.jurnal');
             });
@@ -40,6 +43,8 @@ use Inertia\Inertia;
             });
             Route::group(['prefix' => 'sekolah'], function(){
                 Route::get('/', [DashController::class, 'index'])->name('admin.sekolah');
+                Route::post('/', [SekolahController::class, 'index'])->name('admin.sekolah.index');
+                Route::post('/store', [SekolahController::class, 'store'])->name('admin.sekolah.store');
             });
             Route::group(['prefix' => 'rombel'], function(){
                 Route::get('/', [DashController::class, 'index'])->name('admin.rombel');

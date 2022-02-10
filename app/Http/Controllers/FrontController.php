@@ -16,4 +16,9 @@ class FrontController extends Controller
         $description = 'Laman tentang Jurnal PAI Kecamatan Wagir';
         return Inertia::render('About',['pageTitle' => 'Tentang Jurnal'])->withViewData(['pageTitle' => 'Tentang Jurnal','pageDescription' => $description]);
     }
+
+    public function login()
+    {
+        return Inertia::render('Auth/Login')->withViewData(['pageTitle' => 'Login | Jurnal PAI Wagir', 'description' => 'Laman Login Jurnal Pembelajaran PAI Kecamatan Wagir']);
+    }
 }

@@ -6,6 +6,7 @@
         <meta name="description" content="{{ $pageDescription?? 'Laman Beranda Jurnal PAI Wagir'}}">
         <title>{{ $pageTitle ?? 'Jurnal PAI Kecamatan Wagir'}}</title>
         <link href="{{ mix('/css/app.css') }}" rel="stylesheet" />
+        @routes
         <script src="{{ mix('/js/app.js') }}" defer></script>
         <style>
             * {
@@ -15,6 +16,7 @@
         @inertiaHead
     </head>
     <body>
-        @inertia
+        @routes
+            @inertia
     </body>
 </html>

@@ -1,13 +1,13 @@
 <template>
     <v-app>
         <v-container style="background-image:url('/img/bg-front.jpg');background-size:cover;background-position:center center;" fluid fill-height class="pa-0">
-            <v-img gradient="to top right, #45ff84dd, #6778fffe" height="100vh" width="100vw" dark>
+            <v-img gradient="to top right, #45ff84dd, #6778fffe" height="100vh" width="100vw" >
                 <v-container fluid fill-height>
                     <v-row>
                         <v-col class="hidden-sm-and-down"></v-col>
                         <v-col class="hidden-sm-and-down"></v-col>
                         <v-col class="d-flex justify-center">
-                            <v-card outlined  style="border: 1px solid white;background:#33333311;" class="pa-5">
+                            <v-card  flat class="pa-5 loginBox" dark style="background:transparent;" :style="$vuetify.breakpoint.name == 'xs' ? 'border:0;':'border:1px solid white;'">
                                 <v-card-text>
                                 <h1 class="rtl text-center">بسم الله الرحمن الرحيم</h1>
                                 <h3 class="text-center my-5">LOGIN</h3>
@@ -49,18 +49,20 @@ export default {
     methods: {
         login(e){
             e.preventDefault()
-            axios({
-                method: 'post',
-                url: '/login',
-                data: this.user
-            }).then( res => {
-                if( res.status == 200) {
-                    window.location.href='/dashboard'
-                }
-            }).catch( err => {
-                console.log(err.response)
-                this.errors = err.response.data.errors
-            })
+            if(this.$refs.formLogin.validate()) {
+                axios({
+                    method: 'post',
+                    url: '/login',
+                    data: this.user
+                }).then( res => {
+                    if( res.status == 200) {
+                        window.location.href='/dashboard'
+                    }
+                }).catch( err => {
+                    console.log(err.response)
+                    this.errors = err.response.data.errors
+                })
+            }
         }
     },
     computed: {},
