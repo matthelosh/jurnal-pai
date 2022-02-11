@@ -28,6 +28,7 @@
         "@inertiajs/inertia": "^0.11.0",
         "@inertiajs/inertia-vue": "^0.8.0",
         "@inertiajs/progress": "^0.2.7",
+        "vue-daily-scheduler": "^1.0.9",
         "xlsx": "^0.18.0"
     }
 }

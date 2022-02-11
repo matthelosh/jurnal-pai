@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\User;
 use Inertia\Inertia;
+use App\Models\Periode;
 use Illuminate\Http\Request;
 use Laravel\Fortify\Fortify;
 use Illuminate\Support\Facades\Hash;
@@ -13,8 +14,8 @@ use Illuminate\Cache\RateLimiting\Limit;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use Illuminate\Support\Facades\RateLimiter;
-use App\Actions\Fortify\UpdateUserProfileInformation;
 use Illuminate\Validation\ValidationException;
+use App\Actions\Fortify\UpdateUserProfileInformation;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -58,6 +59,7 @@ class FortifyServiceProvider extends ServiceProvider
 
             if($user ) {
                 if(Hash::check($request->password, $user->password)) {
+                    session()->put('periode', Periode::where('active', 1)->first());
                     return $user;
                 }
             } else {

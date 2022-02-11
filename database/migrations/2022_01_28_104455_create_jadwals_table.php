@@ -18,6 +18,7 @@ class CreateJadwalsTable extends Migration
             $table->string('sekolah_id', 10);
             $table->string('periode_id', 30);
             $table->string('guru_id', 30);
+            $table->string('rombel_id', 60);
             $table->string('hari', 30);
             $table->string('jml_jam', 2);
             $table->string('jamke', 10);

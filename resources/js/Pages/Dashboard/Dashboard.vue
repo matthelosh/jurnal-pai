@@ -1,15 +1,21 @@
 <template>
     <dash-layout>
+        <div>
+        <v-toolbar>
+            <v-btn icon @click="sidebar = !sidebar"><v-icon>mdi-menu</v-icon></v-btn>
+        </v-toolbar>
         <v-container>
             <v-row>
                 <v-col></v-col>
             </v-row>
             <v-row>
                 <v-col cols="12" sm="4">
-                    <v-card tile elevation="5">
+                    <v-card inset> 
                         <v-card-text>
-                            <v-card-title>Halo {{route().current()}}</v-card-title>
+                            <v-card-title>Halo {{ $page.props.user.userable ? $page.props.user.userable.nama : $page.props.user.username }}</v-card-title>
+                            
                         </v-card-text>
+
                     </v-card>
                 </v-col>
             </v-row>
@@ -25,6 +31,7 @@
                 </v-card-text>
             </v-card>
         </v-dialog>
+        </div>
     </dash-layout>
 </template>
 

@@ -16,7 +16,7 @@ class CreateKdsTable extends Migration
         Schema::create('kds', function (Blueprint $table) {
             $table->id();
             $table->string('ki', 2);
-            $table->string('kode_kd', 3);
+            $table->string('kode_kd',5);
             $table->string('tingkat', 3);
             $table->text('teks');
             $table->timestamps();

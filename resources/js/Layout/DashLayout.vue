@@ -32,9 +32,7 @@
             </v-list>
         </v-navigation-drawer>
         <v-main style="background: #efeeff;" app>
-            <v-toolbar>
-                <v-btn icon @click="sidebar = !sidebar"><v-icon>mdi-menu</v-icon></v-btn>
-            </v-toolbar>
+            
             <transition name="fade" v-bind="$attrs" v-on="$listeners">
                 <slot />
             </transition>

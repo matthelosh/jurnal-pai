@@ -53,4 +53,25 @@ use Inertia\Inertia;
                 Route::get('/', [DashController::class, 'index'])->name('admin.settings');
             });
         });
+
+        // Guru
+        Route::prefix('guru')->middleware('role:guru')->group(function() {
+            Route::group(['prefix' => 'jurnal'], function() {
+                Route::get('/', [DashController::class, 'index'])->name('guru.jurnal');
+            });
+            Route::group(['prefix' => 'sekolah'], function() {
+                Route::get('/', [DashController::class, 'index'])->name('guru.sekolah');
+            });
+            Route::group(['prefix' => 'agenda'], function() {
+                Route::get('/', [DashController::class, 'index'])->name('guru.agenda');
+            });
+            Route::group(['prefix' => 'jadwal'], function() {
+                Route::get('/', [DashController::class, 'index'])->name('guru.jadwal');
+            });
+            Route::group(['prefix' => 'rombel'], function() {
+                Route::get('/', [DashController::class, 'index'])->name('guru.rombel');
+                Route::post('/store', [RombelController::class, 'store'])->name('guru.rombel.store');
+                Route::post('/{guruId}', [RombelController::class, 'index'])->name('guru.rombel.index');
+            });
+        });
     });

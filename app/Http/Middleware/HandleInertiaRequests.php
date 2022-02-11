@@ -2,10 +2,14 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Guru;
 use App\Models\Menu;
+use App\Models\User;
+use App\Models\Periode;
 use App\Models\Sekolah;
 use Inertia\Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -39,21 +43,19 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
-            'user' => $request->user() ?? null,
+            'user' => Auth::user() ? $this->user($request) : 'null',
             'menus' => $request->user() ? Menu::all() : null,
-            'sekolah' => $request->user() ? $this->sekolah($request) : null,
+            'periode' => Periode::where('active',1)->first(),
         ]);
     }
 
-    function sekolah($request)
-    {
-        $sekolah=null;
-        if($request->user()->role == 'admin') {
-            return Sekolah::all();
+    function user($request) {
+        if ($request->user()->role == 'admin') {
+            return $request->user();
         } else {
-            return Sekolah::where('npsn', $request->user()->sekolah_id)->first();
+            return User::where('userable_id', $request->user()->userable_id)->with('userable.sekolah')->first();
+            // return $request->user()->userable_id;
         }
     }
-
 
 }
