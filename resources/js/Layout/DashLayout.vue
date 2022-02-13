@@ -1,7 +1,7 @@
 <template>
     <v-app id="dash">
         <v-app-bar app  color="white" clipped-left elevation="1">
-            <v-app-bar-title class="body-1">{{ pageTitle ? pageTitle : 'Dashboard' }}</v-app-bar-title>
+            <v-app-bar-title class="body-1" v-html="pageTitle ? pageTitle : 'Dashboard'"></v-app-bar-title>
             <v-spacer></v-spacer>
             <v-app-bar-nav-icon @click="sidebar = !sidebar" class="hidden-sm-and-up"></v-app-bar-nav-icon>
         </v-app-bar>
@@ -23,7 +23,7 @@
                     <v-list-item-title>{{menu.label}}</v-list-item-title>
                 </inertia-link>
                 <v-divider></v-divider>
-                <inertia-link as="v-list-item" @click="logout" >
+                <inertia-link as="v-list-item" method="post" >
                     <v-list-item-avatar>
                         <v-icon >mdi-exit-to-app</v-icon>
                     </v-list-item-avatar>
@@ -37,18 +37,22 @@
                 <slot />
             </transition>
         </v-main>
-        
-        
-        
+        <div id="loading" class="d-flex align-center justify-center" v-if="loading">
+            <span>
+                <v-icon class="mdi-spin text-h1">mdi-loading</v-icon>
+                <h3 class="text-center mt-5">Mohon tunggu</h3>
+            </span>
+        </div>
     </v-app>
 </template>
 
 <script>
 export default {
     name:'Dashboard',
-    props: {pageTitle: String },
+    props: {pageTitle: String, loading: Boolean },
     data: () => ({
         sidebar: true,
+        isLoading: true,
     }),
     methods: {
         logout(){
@@ -77,11 +81,35 @@ export default {
         },
         
 
+    },
+    beforeMount(){
+        // this.loading = true
+    },
+    mounted() {
+        // this.loading = false
     }
 }
 </script>
 
 <style>
+    #loading{
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(60, 61, 60, 0.678);
+    }
+    #loading i, h3 {
+        animation: coloring 5s infinite ease-in-out;
+    }
+
+    @keyframes coloring {
+        0%      { color: rgb(255, 192, 203); transition: color .35s;}
+        20%     { color: rgb(155, 241, 241); transition: color .35s;}
+        40%     { color: rgb(199, 199, 250); transition: color .35s;}
+        60%     { color: rgb(252, 182, 252); transition: color .35s;}
+        80%    { color: rgb(253, 241, 173); transition: color .35s;}
+        100%    { color: rgb(255, 192, 203); transition: color .35s;}
+    }
     .prim-grad {
         
         background: url('/img/bg-front.jpg');
@@ -112,4 +140,19 @@ export default {
         transform: translateX(100px);
         opacity: 0;
     }
+
+    .btnPrimary {
+    color: white;
+    background: linear-gradient(to right, rgb(47, 174, 206),rgb(219, 78, 102));
+  }
+  .btnSubmit {
+    color: white;
+    background: linear-gradient(to right, rgb(18, 91, 185),rgb(76, 129, 179));
+  }
+  .itemLink {
+    text-decoration: none;
+    color: transparent;
+    background-image: linear-gradient(to right, rgb(189, 75, 170),rgb(219, 78, 102) );
+    background-clip: text;
+  }
 </style>

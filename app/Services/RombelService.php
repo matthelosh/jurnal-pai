@@ -20,9 +20,10 @@ class RombelService {
     $rombel = Rombel::updateOrCreate(
       [
         'id' => $input['id'] ?? null,
-        'kode_rombel' => $input['kode_rombel']
+        
       ],
       [
+        'kode_rombel' => $input['kode_rombel'],
         'tingkat' => $input['tingkat'],
         'nama_rombel' => $input['nama_rombel'],
         'guru_id' => $input['guru_id'],
@@ -32,6 +33,12 @@ class RombelService {
         'siswi' => $input['siswi']
       ]
       );
+    return $rombel;
+  }
+
+  public function destroy($id)
+  {
+    $rombel = Rombel::find($id)->delete();
     return $rombel;
   }
 }

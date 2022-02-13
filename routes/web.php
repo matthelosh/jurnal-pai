@@ -61,17 +61,22 @@ use Inertia\Inertia;
             });
             Route::group(['prefix' => 'sekolah'], function() {
                 Route::get('/', [DashController::class, 'index'])->name('guru.sekolah');
+                Route::put('/', [SekolahController::class, 'store'])->name('guru.sekolah.store');
+                Route::post('/{npsn}', [SekolahController::class, 'show'])->name('guru.sekolah.show');
             });
             Route::group(['prefix' => 'agenda'], function() {
                 Route::get('/', [DashController::class, 'index'])->name('guru.agenda');
             });
             Route::group(['prefix' => 'jadwal'], function() {
                 Route::get('/', [DashController::class, 'index'])->name('guru.jadwal');
+                Route::post('/store', [JadwalController::class, 'store'])->name('guru.jadwal.store');
+                Route::post('/{guruId}', [JadwalController::class, 'index'])->name('guru.jadwal.index');
             });
             Route::group(['prefix' => 'rombel'], function() {
                 Route::get('/', [DashController::class, 'index'])->name('guru.rombel');
                 Route::post('/store', [RombelController::class, 'store'])->name('guru.rombel.store');
                 Route::post('/{guruId}', [RombelController::class, 'index'])->name('guru.rombel.index');
+                Route::delete('/{id}', [RombelController::class, 'destroy'])->name('guru.rombel.destroy');
             });
         });
     });

@@ -20,6 +20,11 @@ class Jadwal extends Model
         return $this->belongsTo(Sekolah::class, 'sekolah_id', 'npsn');
     }
 
+    public function rombel()
+    {
+        return $this->belongsTo(Rombel::class, 'rombel_id', 'kode_rombel');
+    }
+
     public function guru()
     {
         return $this->belongsTo(Guru::class);

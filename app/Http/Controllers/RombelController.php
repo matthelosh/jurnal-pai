@@ -86,8 +86,14 @@ class RombelController extends Controller
      * @param  \App\Models\Rombel  $rombel
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Rombel $rombel)
+    public function destroy($id)
     {
-        //
+        try {
+            $rombel = $this->rombelService->destroy($id);
+            return response()->json(['success' => true, 'rombel' =>$rombel], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'msg' =>$th->getMessage()], 500);
+            //throw $th;
+        }
     }
 }

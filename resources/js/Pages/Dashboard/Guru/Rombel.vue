@@ -1,21 +1,21 @@
 <template>
-  <dash-layout>
+  <dash-layout :loading="loading" :pageTitle="'<span class=\'mdi mdi-google-classroom\'></span><b> Rombel</b>'">
     <div>
       <v-toolbar>
         <v-btn icon @click="sidebar = !sidebar"><v-icon>mdi-menu</v-icon></v-btn>
         <v-text-field solo-inverted  label="Cari" append-icon="mdi-magnify" v-model="search" dense hide-details single-line></v-text-field>
         <v-spacer></v-spacer>
-        <v-btn class="btnPrimary" rounded @click="form = ! form">Tambah</v-btn>
+        <v-btn class="btnPrimary" rounded @click="form = !form"> {{ !form ? 'Tambah' : 'Selesai' }}</v-btn>
       </v-toolbar>
       <v-expand-transition mode="in-out">
-        <v-row v-if="form">
+        <v-row v-show="form">
           <v-col>
             <v-card color="grey lighten-2" tile>
               <v-card-text>
                 <v-form ref="formRombel" @submit.prevent="simpan">
                   <v-row>
                     <v-col cols="12" sm="2">
-                      <v-select v-model="rombel.tingkat" label="Tingkat" :items="[1,2,3,4,5,6]" solo dense :rules="required"></v-select>
+                      <v-select v-model="rombel.tingkat" label="Tingkat" :items="['1','2','3','4','5','6']" solo dense :rules="required"></v-select>
                     </v-col>
                     <v-col cols="12" sm="2">
                       <v-select v-model="rombel.pararel" label="Pararel" :items="['0', 'A', 'B', 'C', 'D']"  solo dense @change="genNamaRombel" :rules="required"></v-select>
@@ -47,7 +47,18 @@
             :headers="headers"
             :search="search"
             outline
-          ></v-data-table>
+          >
+            <template v-slot:[`item.kode_rombel`]="{item}">
+              <a href="#" @click.stop="edit(item)" class="itemLink">{{ item.kode_rombel }}</a>
+            </template>
+            
+            <template v-slot:[`item.opsi`]="{item}">
+              <span>
+                <v-btn icon color="error" @click.stop="hapus(item.id)"><v-icon>mdi-delete</v-icon></v-btn>
+              </span>
+            </template>
+
+          </v-data-table>
         </v-col>
       </v-container>
     </div>
@@ -70,11 +81,27 @@ export default {
       { text: 'Nama Rombel', value: 'nama_rombel' },
       { text: 'Jml Siswa', value: 'siswa' },
       { text: 'Jml Siswi', value: 'siswi' },
+      { text: 'Opsi', value: 'opsi' },
     ],
-    rombel: {}
+    rombel: {},
+    loading: false
   }),
   methods: {
+    hapus(id) {
+      axios({
+        method: 'delete',
+        url: '/guru/rombel/'+id
+      }).then( res => {
+        this.rombel = {}
+        this.getMyRombels()
+      })
+    },
+    edit(rombel) {
+      this.rombel = rombel
+      this.form = true
+    },
     getMyRombels() {
+      this.loading = true
       axios({
         method: 'post',
         url: '/guru/rombel/'+this.guru.id
@@ -86,10 +113,12 @@ export default {
         })
 
         this.rombels = rombels
+        this.loading = false
       })
     },
     simpan() {
       if (this.$refs.formRombel.validate()) {
+        this.loading = true
         let rombel = this.rombel
         rombel.periode_id = this.$page.props.periode.kode_periode
         rombel.kode_rombel = this.guru.sekolah_id+this.$page.props.periode.kode_periode+'-'+rombel.tingkat+((rombel.pararel != '0')?rombel.pararel.toLowerCase():'')
@@ -103,7 +132,9 @@ export default {
           data: rombel
         }).then( res => {
           this.getMyRombels()
-          this.form = false
+          this.$refs.formRombel.reset()
+          this.rombel = {}
+          this.loading = false
         })
       }
     },
@@ -116,6 +147,14 @@ export default {
       return this.$page.props.user.userable
     }
   },
+  watch: {
+    rombel: function(val) {
+      if (!this.rombel.pararel) {
+        const nama = val.nama_rombel.split(' ')
+         this.rombel.pararel = nama[1].length < 2 ? '0' : nama[1].substr(-1,1)
+      }
+    }
+  },
   mounted() {
     this.getMyRombels()
   }
@@ -123,7 +162,7 @@ export default {
 </script>
 
 <style scoped>
-  .btnPrimary {
+  /* .btnPrimary {
     color: white;
     background: linear-gradient(to right, rgb(47, 174, 206),rgb(219, 78, 102));
   }
@@ -131,4 +170,10 @@ export default {
     color: white;
     background: linear-gradient(to right, rgb(18, 91, 185),rgb(76, 129, 179));
   }
+  .itemLink {
+    text-decoration: none;
+    color: transparent;
+    background-image: linear-gradient(to right, rgb(189, 75, 170),rgb(219, 78, 102) );
+    background-clip: text;
+  } */
 </style>

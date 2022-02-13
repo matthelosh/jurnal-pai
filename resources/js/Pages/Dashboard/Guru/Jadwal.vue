@@ -1,29 +1,89 @@
 <template>
-  <dash-layout>
+  <dash-layout :loading="loading">
     <div>
       <v-toolbar>
         <v-btn icon @click="sidebar = !sidebar"><v-icon>mdi-menu</v-icon></v-btn>
+        <v-spacer></v-spacer>
+          <v-btn class="btnPrimary mr-3" dark rounded> <v-icon color="white">mdi-printer</v-icon> Cetak </v-btn>
       </v-toolbar>
       <v-container>
         <v-col>
           <v-card>
+            <v-card-title secondary-title>
+                <v-icon>mdi-calendar-check</v-icon> Jadwal Mengajar Pendidikan Agama Islam
+            </v-card-title>
             <v-card-text>
-              <v-card-title>
-                <v-icon>mdi-calendar-check</v-icon>  Agenda Mengajar 
-                <v-spacer></v-spacer>
-                <v-btn  outlined icon @click="$refs.calendar.prev()"><v-icon>mdi-chevron-left</v-icon></v-btn>
-            
-                <v-btn  outlined icon @click="$refs.calendar.next()"><v-icon>mdi-chevron-right</v-icon></v-btn>
-              </v-card-title>
-              <v-calendar locale="id" :first-interval="10" :interval-minutes="35" :interval-count="10" @click:date="tes" :weekdays="[1,2,3,4,5,6]" :max-days="6" :type="type" v-model="selectedDate" @click:time="timeClicked" ref="calendar">
-                <template v-slot:event="{ event }">
-                    {{ event.moreInformation }}
-                </template>
-              </v-calendar>
+              <table border="1" width="100%" id="tableJadwal">
+                <thead>
+                  <tr>
+                    <th>Jam Ke</th>
+                    <th>Senin</th>
+                    <th>Selasa</th>
+                    <th>Rabu</th>
+                    <th>Kamis</th>
+                    <th>Jumat</th>
+                    <th>Sabtu</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(jadwal,i) in schedules" :key="i">
+                    <td>{{jadwal.jamke}}</td>
+                    <td :class="(jadwal.senin && jadwal.senin != 'Istirahat')? 'primary accent-'+jadwal.senin.kode_rombel.substr(-1): ((jadwal.senin && jadwal.senin == 'Istirahat') ? 'istirahat' : '')" @click="edit({hari: 'Senin', rombel_id: jadwal.senin ? jadwal.senin.kode_rombel:null, id: jadwal.senin ? jadwal.senin.id:null}, $event)">{{jadwal.senin ? jadwal.senin.nama_rombel: null}}</td>
+                    <td :class="(jadwal.selasa && jadwal.selasa != 'Istirahat')? 'primary lighten-'+jadwal.selasa.kode_rombel.substr(-1): ((jadwal.selasa && jadwal.selasa == 'Istirahat') ? 'istirahat' : '')" @click="edit({hari:'Selasa', rombel_id:jadwal.selasa?jadwal.selasa.kode_rombel:null, id: jadwal.selasa ? jadwal.selasa.id:null},$event)">{{jadwal.selasa?jadwal.selasa.nama_rombel:null}}</td>
+                    <td :class="(jadwal.rabu && jadwal.rabu != 'Istirahat')? 'primary lighten-'+jadwal.rabu.kode_rombel.substr(-1): ((jadwal.rabu && jadwal.rabu == 'Istirahat') ? 'istirahat' : '')" @click="edit({hari:'Rabu', rombel_id:jadwal.rabu?jadwal.rabu.kode_rombel:null, id: jadwal.rabu ? jadwal.rabu.id:null}, $event)">{{jadwal.rabu?jadwal.rabu.nama_rombel:null}}</td>
+                    <td :class="(jadwal.kamis && jadwal.kamis != 'Istirahat')? 'primary lighten-'+jadwal.kamis.kode_rombel.substr(-1): ((jadwal.kamis && jadwal.kamis == 'Istirahat') ? 'istirahat' : '')" @click="edit({hari:'Kamis', rombel_id:jadwal.kamis?jadwal.kamis.kode_rombel:null, id: jadwal.kamis ? jadwal.kamis.id:null}, $event)">{{jadwal.kamis?jadwal.kamis.nama_rombel:null}}</td>
+                    <td :class="(jadwal.jumat && jadwal.jumat != 'Istirahat')? 'primary lighten-'+jadwal.jumat.kode_rombel.substr(-1): ((jadwal.jumat && jadwal.jumat == 'Istirahat') ? 'istirahat' : '')" @click="edit({hari:'Jumat', rombel_id:jadwal.jumat?jadwal.jumat.kode_rombel:null, id: jadwal.jumat ? jadwal.jumat.id:null}, $event)">{{jadwal.jumat ? jadwal.jumat.nama_rombel:null}}</td>
+                    <td :class="(jadwal.sabtu && jadwal.sabtu != 'Istirahat')? 'primary lighten-'+jadwal.sabtu.kode_rombel.substr(-1): ((jadwal.sabtu && jadwal.sabtu == 'Istirahat') ? 'istirahat' : '')" @click="edit({hari:'Sabtu', rombel_id:jadwal.sabtu?jadwal.sabtu.kode_rombel:null, id: jadwal.sabtu ? jadwal.sabtu.id:null}, $event)">{{jadwal.sabtu?jadwal.sabtu.nama_rombel:null}}</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <v-row class="my-5">
+                <v-col class="d-flex justify-center" cols="12" sm="4">
+                  <span>
+                    <p class="text-center my-0">Mengetahui</p>
+                    <p class="text-center">Kepala {{$page.props.user.userable.sekolah.nama_sekolah}}</p>
+                    <br>
+                    <br>
+                    <br>
+                    <p class="text-center my-0"><b><u>{{ $page.props.user.userable.sekolah.nama_ks.toUpperCase() }}</u></b></p>
+                    <p class="text-center my-0" >NIP. {{ $page.props.user.userable.sekolah.nip_ks }}</p>
+                  </span>
+                </v-col>
+                <v-col class="d-flex justify-center" cols="12" sm="4"></v-col>
+                <v-col class="d-flex justify-center" cols="12" sm="4">
+                  <span>
+                    <p class="text-center my-0">Wagir, ..... 2022</p>
+                    <p class="text-center">Guru Pendidikan Agama Islam</p>
+                    <br>
+                    <br>
+                    <br>
+                    <p class="text-center my-0"><b><u>{{ $page.props.user.userable.nama }}</u></b></p>
+                    <p class="text-center my-0" >NIP. {{ $page.props.user.userable.nip }}</p>
+                  </span>
+                </v-col>
+              </v-row>
             </v-card-text>
           </v-card>
         </v-col>
       </v-container>
+      <v-dialog max-width="600" v-model="form">
+        <v-card>
+          <v-card-title>Pilih Kelas</v-card-title>
+          <v-card-text>
+            <v-form ref="formJadwal" @submit.prevent="simpan">
+              <v-row>
+                <v-select label="Rombel" v-model="jadwal.rombel_id  " :items="rombels" item-text="nama_rombel" item-value="kode_rombel" solo dense :rules="[v => !!v||'Pilih Kelas Dulu']"></v-select>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-btn block color="primary" dark type="submit">Simpan</v-btn>
+                </v-col>
+              </v-row>
+            </v-form>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
     </div>
   </dash-layout>
 </template>
@@ -36,37 +96,134 @@ export default {
   name: 'GuruRombel',
   components: { DashLayout,VueSchedule },
   data: () => ({
-    jadwals: '',
-    headers: [
-      { text: 'Jam ke'}
-    ],
+    loading: false,
+    form: false,
+    jadwals: [],
     jadwal: '',
-    type: 'month',
-    selectedDate: '',
-    agenda: {
-      tanggal: '',
-      waktu: '',
-      hari: ''
-    },
-    rombels: [
-      { text: 'Kelas 1', value: 'i' },
-      { text: 'Kelas 2', value: 'ii'},
-      { text: 'Kelas 3', value: 'iii'},
-      { text: 'Kelas 4', value: 'iv'},
-      { text: 'Kelas 5', value: 'v'},
-      { text: 'Kelas 6', value: 'vi'},
-    ]
+    rombels: [],
+    jams: [],
+    mulai: new Date().setHours(7,0),
+    durasi: 35,
+    interval: 10,
+    rombels: []
   }),
   methods: {
-    tes(e) {
-      this.selectedDate = e.date
-      this.agenda.tanggal = e.date
-      this.type="day"
+    simpan(){
+      if(this.$refs.formJadwal.validate()) {
+        this.loading = true
+        axios({
+          method: 'post',
+          url: '/guru/jadwal/store',
+          data: this.jadwal
+        }).then( res => {
+          this.$refs.formJadwal.reset()
+          this.form = false
+          this.loading = false
+          this.getJadwals()
+        })
+      }
     },
-    timeClicked(e){
-      alert(e.time)
-      this.agenda.waktu = e.time
+    edit(item, $event){
+      // alert(item.hari)
+      this.form = true
+      this.jadwal = {
+        id: item.id,
+        rombel_id: item.rombel_id, 
+        hari: item.hari, 
+        jamke: $event.target.parentElement.firstChild.innerText,
+        periode_id: this.$page.props.periode.kode_periode,
+        sekolah_id: this.$page.props.user.userable.sekolah_id,
+        guru_id: this.$page.props.user.userable_id
+        }
+      // alert($event.target.parentElement.firstChild.innerText)
+      // console.log(e)
+    },
+    getJams(){
+      const date = new Date()
+      let durasi = this.durasi*1000*60
+      let start = this.mulai
+      let end = date.setTime(this.interval*durasi)
+      let jams = []
+      for(var i = 0; i < this.interval; i++) {
+        jams[i] = start + (durasi*i)
+      }
+
+      this.jams = jams
+    },
+    getMyRombels() {
+      this.loading = true
+      axios({
+        method: 'post',
+        url: '/guru/rombel/'+this.$page.props.user.userable_id
+      }).then( res => {
+        let rombels = [{kode_rombel: 'hapus', nama_rombel: 'Hapus?'}]
+        res.data.rombels.forEach((item,index) => {
+          item.no = index+1
+          rombels.push(item)
+        })
+
+        this.rombels = rombels
+        this.loading = false
+      })
+    },
+    getJadwals() {
+      this.loading = true
+      axios({
+        method: 'post',
+        url: '/guru/jadwal/'+this.$page.props.user.userable_id+'?periode='+this.$page.props.periode.kode_periode
+      }).then( res=> {
+        this.jadwals = res.data.jadwals
+        this.loading = false
+      })
     }
+    
+  },
+  computed: {
+    schedules() {
+      let jadwals = []
+      this.jams.forEach((item,index) => {
+        var jamke = new Date(item).getHours()+':'+new Date(item).getMinutes()
+        let obj = { jamke: jamke, senin:'', selasa:''}
+        this.jadwals.forEach(j => {
+          switch(j.hari) {
+            case 'Senin':
+              if (j.jamke == jamke) obj.senin = j.rombel ?  {nama_rombel:j.rombel.nama_rombel, kode_rombel:j.rombel.kode_rombel, id: j.id}:null
+              break
+            
+            case 'Selasa':
+              if (j.jamke == jamke) obj.selasa = j.rombel? {nama_rombel:j.rombel.nama_rombel, kode_rombel:j.rombel.kode_rombel, id: j.id}:null
+              break
+            
+            case 'Rabu':
+              if (j.jamke == jamke) obj.rabu = j.rombel? {nama_rombel:j.rombel.nama_rombel, kode_rombel:j.rombel.kode_rombel, id: j.id}:null
+              break
+            
+            case 'Kamis':
+              if (j.jamke == jamke) obj.kamis = j.rombel? {nama_rombel:j.rombel.nama_rombel, kode_rombel:j.rombel.kode_rombel, id: j.id}:null
+              break
+            
+            case 'Jumat':
+              if (j.jamke == jamke) obj.jumat = j.rombel? {nama_rombel:j.rombel.nama_rombel, kode_rombel:j.rombel.kode_rombel, id: j.id}:null
+              break
+            
+            case 'Sabtu':
+              if (j.jamke == jamke) obj.sabtu = j.rombel? {nama_rombel:j.rombel.nama_rombel, kode_rombel:j.rombel.kode_rombel, id: j.id}:null
+              break
+            
+          }
+        })
+
+        jadwals.push(obj)
+        
+      })
+
+      return jadwals
+    }
+  },
+  mounted() {
+    this.getMyRombels()
+    this.getJadwals()
+    this.getJams()
   }
 }
 </script>
@@ -74,5 +231,22 @@ export default {
 <style scoped>
   table {
     border-collapse: collapse;
+  }
+  #tableJadwal td{
+    text-align: center;
+    padding: 10px 0;
+    width: 14.3%;
+  }
+  #tableJadwal td.aktif {
+    background: rgb(216, 243, 216);
+    color: #212121;
+    text-transform: uppercase;
+    font-weight: bolder;
+  }
+  #tableJadwal td.istirahat {
+    background: rgb(245, 145, 145);
+    color: #212121;
+    text-transform: uppercase;
+    font-weight: bolder;
   }
 </style>

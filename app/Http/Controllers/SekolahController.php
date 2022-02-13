@@ -52,21 +52,15 @@ class SekolahController extends Controller
      * @param  \App\Models\Sekolah  $sekolah
      * @return \Illuminate\Http\Response
      */
-    public function show(Sekolah $sekolah)
+    public function show($npsn)
     {
-        //
+        try {
+            return response()->json(['success' => true, 'sekolah' => Sekolah::where('npsn', $npsn)->first()], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'msg' => $th->getMessage()], 500);
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Sekolah  $sekolah
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Sekolah $sekolah)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -75,10 +69,15 @@ class SekolahController extends Controller
      * @param  \App\Models\Sekolah  $sekolah
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Sekolah $sekolah)
-    {
-        //
-    }
+    // public function update(Request $request)
+    // {
+    //     try {
+    //         $sekolah = $this->sekolahService->update($request->all());
+    //         return response()->json(['success' => true, 'sekolah' => $sekolah], 200);
+    //     } catch (\Throwable $th) {
+    //         return response()->json(['success' => false, 'msg' => $th->getMessage()], 500);
+    //     }
+    // }
 
     /**
      * Remove the specified resource from storage.

@@ -21,7 +21,7 @@ class SekolahService {
         'npsn' => $input['npsn'], 
         'nama_sekolah' => $input['nama_sekolah'], 
         'alamat' => $input['alamat'], 
-        'telp' => $input['tels'] ?? null, 
+        'telp' => $input['telp'] ?? null, 
         'email' => $input['email'] ?? null, 
         'website' => $input['website'] ?? null, 
         'nama_ks' => $input['nama_ks'],
