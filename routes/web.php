@@ -52,6 +52,9 @@ use Inertia\Inertia;
             Route::group(['prefix' => 'settings'], function(){
                 Route::get('/', [DashController::class, 'index'])->name('admin.settings');
             });
+            Route::group(['prefix' => 'perangkat'], function() {    
+                Route::get('/', [DashController::class, 'index'])->name('admin.perangkat');
+            });
         });
 
         // Guru

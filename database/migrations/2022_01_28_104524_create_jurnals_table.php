@@ -24,7 +24,7 @@ class CreateJurnalsTable extends Migration
             $table->date('tanggal');
             $table->string('tema', 191);
             $table->string('absensi_siswa', 3);
-            $table->string('anekdot', 191);
+            $table->string('catatan', 191);
             $table->text('teks');
             $table->timestamps();
         });

@@ -15,6 +15,11 @@ class Kd extends Model
     {
         return $this->belongsTo(Rombel::class, 'tingkat','tingkat');
     }
+
+    public function indikators()
+    {
+        return $this->hasMany(Indikator::class, 'kd_id', 'kode_kd');
+    }
 }
 
 

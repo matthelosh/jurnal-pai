@@ -16,14 +16,15 @@
                     v-for="(menu,i) in menus" :key="i"
                     :href="menu.url"
                     :class="isActive(menu.url)"
+                    class="my-1"
                 >
-                    <v-list-item-avatar>
+                    <v-list-item-avatar class="ma-0">
                         <v-icon >{{ menu.icon }}</v-icon>
                     </v-list-item-avatar>
                     <v-list-item-title>{{menu.label}}</v-list-item-title>
                 </inertia-link>
                 <v-divider></v-divider>
-                <inertia-link as="v-list-item" method="post" >
+                <inertia-link as="v-list-item" method="post" href="/logout" >
                     <v-list-item-avatar>
                         <v-icon >mdi-exit-to-app</v-icon>
                     </v-list-item-avatar>
@@ -33,9 +34,9 @@
         </v-navigation-drawer>
         <v-main style="background: #efeeff;" app>
             
-            <transition name="fade" v-bind="$attrs" v-on="$listeners">
+            <!-- <transition name="fade" v-bind="$attrs" v-on="$listeners"> -->
                 <slot />
-            </transition>
+            <!-- </transition> -->
         </v-main>
         <div id="loading" class="d-flex align-center justify-center" v-if="loading">
             <span>
