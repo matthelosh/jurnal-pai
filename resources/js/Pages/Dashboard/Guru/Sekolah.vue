@@ -46,7 +46,7 @@
           <v-card>
             <v-card-title><v-icon>mdi-city-variant-outline</v-icon> Data Sekolah</v-card-title>
             <v-card-text>
-              <v-list>
+              <v-list v-if="sekolah">
                 <v-list-item>
                   <v-list-item-avatar><v-icon>mdi-label</v-icon></v-list-item-avatar>
                   <v-list-item-content>
@@ -104,6 +104,10 @@
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
+              <v-alert color="error" dark>
+                <v-icon>mdi-alert</v-icon>
+                Data Sekolah Anda Belum Ada. Hubungi Admin.
+              </v-alert>
             </v-card-text>
           </v-card>
         </v-col>
