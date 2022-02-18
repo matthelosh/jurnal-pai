@@ -7,7 +7,7 @@
         <v-spacer></v-spacer>
         <v-btn class="btnPrimary" rounded @click="form = !form"> {{ !form ? 'Tambah' : 'Selesai' }}</v-btn>
       </v-toolbar>
-      <v-expand-transition mode="in-out">
+      <v-expand-transition mode="in-out"> 
         <v-row v-show="form">
           <v-col>
             <v-card color="grey lighten-2" tile>
