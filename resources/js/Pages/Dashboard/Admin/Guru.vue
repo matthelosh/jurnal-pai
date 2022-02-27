@@ -9,20 +9,20 @@
               <v-card-text>
                 <v-form ref="formGuru" @submit.prevent="simpan">
                   <v-row>
-                    <v-col>
-                      <v-text-field label="NIP" v-model="guru.nip"></v-text-field>
+                    <v-col cols="12" sm="3">
+                      <v-text-field label="NIP" v-model="guru.nip" solo></v-text-field>
                     </v-col>
-                    <v-col>
-                      <v-text-field label="Nama" v-model="guru.nama" :rules="[v => !!v || 'Harus Diisi']"></v-text-field>
+                    <v-col cols="12" sm="3">
+                      <v-text-field label="Nama" v-model="guru.nama" :rules="[v => !!v || 'Harus Diisi']" solo></v-text-field>
                     </v-col>
-                    <v-col>
-                      <v-select label="Jenis Kelamin" v-model="guru.jk" :items="['Laki-laki','Perempuan']" :rules="[v => !!v || 'Harus Diisi']"></v-select>
+                    <v-col cols="12" sm="2">
+                      <v-select label="Jenis Kelamin" v-model="guru.jk" :items="['Laki-laki','Perempuan']" :rules="[v => !!v || 'Harus Diisi']" solo></v-select>
                     </v-col>
-                    <v-col>
-                      <v-autocomplete label="Sekolah" v-model="guru.sekolah_id" :items="sekolahs" item-text="text" item-value="value" :rules="[v => !!v || 'Harus Diisi']"></v-autocomplete>
+                    <v-col cols="12" sm="4">
+                      <v-autocomplete label="Sekolah" v-model="guru.sekolah_id" :items="sekolahs" item-text="text" item-value="value" :rules="[v => !!v || 'Harus Diisi']" solo></v-autocomplete>
                     </v-col>
                     <v-col cols="12">
-                      <v-btn dark color="green" block type="submit">Simpan</v-btn>
+                      <v-btn dark color="primary" block type="submit">Simpan</v-btn>
                     </v-col>
                   </v-row>
                 </v-form>
@@ -118,8 +118,9 @@
 import DashLayout from '../../../Layout/DashLayout'
 import XLSX from 'xlsx'
 export default {
+  name: 'AdminGuru',
   components: {DashLayout},
-  props: {sekolah:Array},
+  props: {},
   data: () => ({
     parsingFile: false,
     search:'',
@@ -144,7 +145,8 @@ export default {
       { text: 'Nama', value: 'nama'},
       { text: 'JK', value: 'jk' },
       { text: 'Sekolah', value: 'sekolah_id' }
-    ]
+    ],
+    sekolahs: []
   }),
   methods: {
     buatAkun(){
@@ -241,26 +243,30 @@ export default {
       })
     },
     getGurus(){
+      this.parsingFile=true
       axios({
         method: 'post',
         url: '/admin/guru'
       }).then(res => {
         this.gurus = res.data.gurus
+        this.parsingFile=false
       })
-    }
-  },
-  computed: {
-    sekolahs(){
+    }, 
+    setSekolahs() {
       let items = []
-      this.sekolah.forEach(item => {
+      const datas = this.$page.props.sekolah
+      datas.forEach(item => {
         items.push({text: item.nama_sekolah, value: item.npsn})
       })
 
-      return items
+      this.sekolahs = items
     }
+  },
+  computed: {
   },
   created(){
     this.getGurus()
+    this.setSekolahs()
   }
 }
 </script>

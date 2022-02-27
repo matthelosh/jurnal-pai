@@ -13,8 +13,8 @@
             <v-list dense shaped>
                 <v-subheader>MENU</v-subheader>
                 <inertia-link as="v-list-item"
-                    v-for="(menu,i) in menus" :key="i"
-                    :href="menu.url"
+                    v-for="(menu,i) in $page.props.menus" :key="i"
+                    :href="route($page.props.user.role+'.'+menu.url)"
                     :class="isActive(menu.url)"
                     class="my-1"
                 >
@@ -50,7 +50,7 @@
 <script>
 export default {
     name:'Dashboard',
-    props: {pageTitle: String, loading: Boolean },
+    props: {pageTitle: String, loading: Boolean,menus: Array },
     data: () => ({
         sidebar: true,
         isLoading: true,
@@ -65,18 +65,21 @@ export default {
             let text = url.split('/')
             let rute = this.route().current().split('.')
             return (rute[rute.length-1] == text[text.length -1]) ? 'aktif' : ''
+        },
+        tes(menu){
+            alert(menu.url)
         }
     },
     computed: {
-        menus(){
-            const datas = this.$page.props.menus
-            let menus = datas.filter(menu => {
-                menu.url = (menu.url != '/dashboard') ? '/'+this.$page.props.user.role+menu.url:'/dashboard'
-                return menu.role.includes(this.$page.props.user.role)
-            })
+        // menus(){
+        //     const datas = this.$page.props.menus
+        //     let menus = datas.filter(menu => {
+        //         menu.url = (menu.url != '/dashboard') ? '/'+this.$page.props.user.role+menu.url :'/dashboard'
+        //         return menu.role.includes(this.$page.props.user.role)
+        //     })
 
-            return menus
-        },
+        //     return menus
+        // },
         route() {
             return window.route
         },

@@ -65,9 +65,13 @@ class JadwalController extends Controller
      * @param  \App\Models\Jadwal  $jadwal
      * @return \Illuminate\Http\Response
      */
-    public function show(Jadwal $jadwal)
+    public function show(Request $request)
     {
-        //
+        try {
+            return response()->json(['success' => true, 'jadwals' => $this->jadwalService->show($request->query('id_guru'), $request->query('hari'))], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'msg' => $th->getMessage()], 500);
+        }
     }
 
     /**

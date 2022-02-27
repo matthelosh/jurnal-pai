@@ -18,6 +18,7 @@ class CreateKdsTable extends Migration
             $table->string('ki', 2);
             $table->string('kode_kd',5);
             $table->string('tingkat', 3);
+            $table->string('semester', 3);
             $table->text('teks');
             $table->timestamps();
         });

@@ -15,7 +15,7 @@ class CreatePeriodesTable extends Migration
     {
         Schema::create('periodes', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_periode', 20);
+            $table->string('kode_periode', 20)->unique();
             $table->string('label', 40);
             $table->string('tapel', 10);
             $table->string('semester', 10);

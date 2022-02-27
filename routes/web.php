@@ -26,8 +26,15 @@ use Inertia\Inertia;
 
         // admin
         Route::prefix('admin')->middleware('role:admin')->group(function() {
+            Route::group(['prefix' => 'dashboard'], function(){
+                Route::get('/', [DashController::class, 'index'])->name('admin.dashboard');
+            });
             Route::group(['prefix' => 'jurnal'], function(){
                 Route::get('/', [DashController::class, 'index'])->name('admin.jurnal');
+            });
+
+            Route::group(['prefix' => 'kd'], function() {
+                Route::post('/', [KdController::class, 'index'])->name('admin.kd.index');
             });
             Route::group(['prefix' => 'guru'], function(){
                 Route::get('/', [DashController::class, 'index'])->name('admin.guru');
@@ -37,6 +44,9 @@ use Inertia\Inertia;
                 Route::post('/buatakun', [GuruController::class, 'createAccount'])->name('admin.guru.buatakun');
                 Route::post('/impor', [GuruController::class, 'impor'])->name('admin.guru.impor');
                 Route::delete('/{id}', [GuruController::class, 'destroy'])->name('admin.guru.destroy');
+            });
+            Route::group(['prefix' => 'jadwal'], function() {
+                Route::get('/', [DashController::class, 'index'])->name('admin.jadwal');
             });
             Route::group(['prefix' => 'jurnal'], function(){
                 Route::get('/', [DashController::class, 'index'])->name('admin.jurnal');
@@ -51,14 +61,24 @@ use Inertia\Inertia;
             });
             Route::group(['prefix' => 'settings'], function(){
                 Route::get('/', [DashController::class, 'index'])->name('admin.settings');
+                Route::post('/periode', [SettingController::class, 'periode'])->name('admin.settings.periode');
+                Route::post('/periode/store', [SettingController::class, 'storePeriode'])->name('admin.settings.periode.store');
+                Route::put('/periode/status', [SettingController::class, 'StatusPeriode'])->name('admin.settings.periode.status');
+
             });
             Route::group(['prefix' => 'perangkat'], function() {    
                 Route::get('/', [DashController::class, 'index'])->name('admin.perangkat');
+                Route::post('/get', [PerangkatController::class, 'get'])->name('admin.perangkat.get');
+                // Route::post('/pembelajaran', [PerangkatController::class, 'indexPbl'])->name('admin.perangkat.pembelajaran.store');
+                Route::post('/pembelajaran/store', [PerangkatController::class, 'storePbl'])->name('admin.perangkat.pembelajaran.store');
             });
         });
 
         // Guru
         Route::prefix('guru')->middleware('role:guru')->group(function() {
+            Route::group(['prefix' => 'dashboard'], function(){
+                Route::get('/', [DashController::class, 'index'])->name('guru.dashboard');
+            });
             Route::group(['prefix' => 'jurnal'], function() {
                 Route::get('/', [DashController::class, 'index'])->name('guru.jurnal');
             });
@@ -67,12 +87,18 @@ use Inertia\Inertia;
                 Route::put('/', [SekolahController::class, 'store'])->name('guru.sekolah.store');
                 Route::post('/{npsn}', [SekolahController::class, 'show'])->name('guru.sekolah.show');
             });
+
+            Route::group(['prefix' => 'pembelajaran'], function() {
+                Route::post('/', [PembelajaranController::class, 'getByTingkat'])->name('guru.pembelajaran.bytingkat');
+            });
+
             Route::group(['prefix' => 'agenda'], function() {
                 Route::get('/', [DashController::class, 'index'])->name('guru.agenda');
             });
             Route::group(['prefix' => 'jadwal'], function() {
                 Route::get('/', [DashController::class, 'index'])->name('guru.jadwal');
                 Route::post('/store', [JadwalController::class, 'store'])->name('guru.jadwal.store');
+                Route::post('/show', [JadwalController::class, 'show'])->name('guru.jadwal.show');
                 Route::post('/{guruId}', [JadwalController::class, 'index'])->name('guru.jadwal.index');
             });
             Route::group(['prefix' => 'rombel'], function() {

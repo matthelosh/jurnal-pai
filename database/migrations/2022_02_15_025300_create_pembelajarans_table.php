@@ -19,9 +19,9 @@ class CreatePembelajaransTable extends Migration
             $table->string('semester',20);
             $table->string('tingkat',20);
             $table->string('kd_id',100);
+            $table->string('ke',4);
             $table->string('judul',70);
             $table->text('sub');
-            $table->string('ket',20);
             $table->timestamps();
         });
     }

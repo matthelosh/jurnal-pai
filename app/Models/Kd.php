@@ -9,7 +9,7 @@ class Kd extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['ki', 'kode_kd','tingkat', 'teks'];
+    protected $fillable = ['ki', 'kode_kd','tingkat', 'semester', 'teks'];
 
     public function rombel()
     {

@@ -44,11 +44,16 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'user' => Auth::user() ? $this->user($request) : 'null',
-            'menus' => $request->user() ? Menu::all() : null,
+            'menus' => $request->user() ? Menu::where('role','LIKE', '%'.$request->user()->role.'%')->get() : null,
             'periode' => Periode::where('active',1)->first(),
+            'sekolah' => Auth::user() ? $this->sekolah($request->user()) : null,
         ]);
     }
 
+    public function sekolah($user)
+    {
+        return $user->role == 'admin' ? Sekolah::all() : null;
+    }
     function user($request) {
         if ($request->user()->role == 'admin') {
             return $request->user();

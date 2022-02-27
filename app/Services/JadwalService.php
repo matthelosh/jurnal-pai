@@ -39,4 +39,17 @@ class JadwalService {
       );
       return $jadwal;
   }
+
+  public function show($guruId, $hari)
+  {
+    $jadwals = Jadwal::where(
+      [
+        ['guru_id', '=',$guruId],
+        ['hari','=', $hari]
+      ]
+    )->with('rombel')
+    ->get();
+
+    return $jadwals;
+  }
 }

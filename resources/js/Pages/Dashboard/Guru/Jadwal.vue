@@ -1,5 +1,5 @@
 <template>
-  <dash-layout :loading="loading">
+  <dash-layout :loading="loading" :pageTitle="'<span class=\'mdi mdi-calendar\'></span> Jadwal'">
     <div>
       <v-toolbar>
         <v-btn icon @click="sidebar = !sidebar"><v-icon>mdi-menu</v-icon></v-btn>

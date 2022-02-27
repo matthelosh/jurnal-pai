@@ -29,4 +29,12 @@ class Rombel extends Model
     {
         return $this->belongsTo(Guru::class);
     }
+
+    public static function boot()
+    {
+        parent::boot();
+        static::deleting(function($rombel){
+            $rombel->jadwals()->delete();
+        });
+    }
 }
