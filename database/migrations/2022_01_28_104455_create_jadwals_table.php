@@ -20,7 +20,7 @@ class CreateJadwalsTable extends Migration
             $table->string('guru_id', 30);
             $table->string('rombel_id', 60);
             $table->string('hari', 30);
-            $table->string('jml_jam', 2);
+            $table->string('jml_jam', 2)->nullable();
             $table->string('jamke', 10);
             $table->boolean('active')->default(true);
             $table->timestamps();

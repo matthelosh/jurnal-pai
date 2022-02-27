@@ -72,9 +72,15 @@ use Inertia\Inertia;
                 // Route::post('/pembelajaran', [PerangkatController::class, 'indexPbl'])->name('admin.perangkat.pembelajaran.store');
                 Route::post('/pembelajaran/store', [PerangkatController::class, 'storePbl'])->name('admin.perangkat.pembelajaran.store');
             });
+
+            Route::group(['prefix' => 'menu'], function() {
+                Route::post('/', [MenuController::class, 'index'])->name('admin.menu');
+                Route::post('/store', [MenuController::class, 'store'])->name('admin.menu.store');
+                Route::delete('/{id}', [MenuController::class, 'destroy'])->name('admin.menu.destroy');
+            });
         });
 
-        // Guru
+        // Guru 
         Route::prefix('guru')->middleware('role:guru')->group(function() {
             Route::group(['prefix' => 'dashboard'], function(){
                 Route::get('/', [DashController::class, 'index'])->name('guru.dashboard');
