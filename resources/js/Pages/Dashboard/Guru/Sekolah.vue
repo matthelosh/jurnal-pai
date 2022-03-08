@@ -14,7 +14,7 @@
               <v-card-text>
                 <v-form ref="formSekolah" @submit.prevent="simpan">
                   <v-row>
-                    <v-col cols="12" sm="4">
+                    <v-col cols="12" sm="3">
                       <v-text-field v-model="sekolah.telp" label="No. Telepon" prepend-inner-icon="mdi-phone" solo dense :rules="required"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="4">
@@ -28,6 +28,9 @@
                     </v-col>
                     <v-col cols="12" sm="4">
                       <v-text-field v-model="sekolah.nip_ks" label="NIP Kepala Sekolah" prepend-inner-icon="mdi-barcode" solo dense ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <v-text-field v-model="sekolah.alamat" label="Alamat" prepend-inner-icon="mdi-map-marker" solo dense ></v-text-field>
                     </v-col>
                     <v-col cols="12" >
                       <v-btn class="btnSubmit" type="submit" rounded block dark>Simpan</v-btn>

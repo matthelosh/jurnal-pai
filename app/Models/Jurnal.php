@@ -9,7 +9,7 @@ class Jurnal extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['periode_id', 'sekolah_id', 'guru_id','rombel_id', 'kd_id', 'hari', 'tanggal','tema','absensi_siswa','catatan','teks'];
+    protected $fillable = ['periode_id', 'sekolah_id', 'guru_id','rombel_id', 'kd_id', 'hari', 'tanggal','tema','subtema','absensi_siswa','catatan','teks'];
 
     public function periode()
     {

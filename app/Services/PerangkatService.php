@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Indikator;
 use App\Models\Kd;
 use App\Models\Pembelajaran;
 use Illuminate\Support\Facades\Facade;
@@ -19,6 +20,12 @@ class PerangkatService  {
   {
     $pbl = Pembelajaran::all();
     return $pbl;
+  }
+
+  public function getIndikator($tingkat, $kds)
+  {
+    $indikators = Indikator::where('tingkat', $tingkat)->whereIn('kd_id', $kds)->get();;
+    return $indikators;
   }
 
   public function storePbl($input)

@@ -57,9 +57,9 @@ class PembelajaranController extends Controller
      * @param  \App\Models\Pembelajaran  $pembelajaran
      * @return \Illuminate\Http\Response
      */
-    public function show(Pembelajaran $pembelajaran)
+    public function show(Request $request, $ke)
     {
-        //
+        return response()->json(['success' => true, 'pembelajaran' => PembelajaranServiceFacade::show($ke, $request->query('tingkat')) ], 200);
     }
 
     /**

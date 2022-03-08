@@ -112,6 +112,9 @@
                         <v-container>
                           <v-row>
                             <v-col>
+                              <v-select label="Parent" v-model="menu.data.parent_id" dense :items="parents" item-text="label" item-value="id"></v-select>
+                            </v-col>
+                            <v-col>
                               <v-text-field label="Label" v-model="menu.data.label" dense></v-text-field>
                             </v-col>
                             <v-col>
@@ -267,6 +270,16 @@ export default {
         this.menu.items = res.data.menus
         this.menu.loading = false
       })
+    }
+  },
+  computed: {
+    parents() {
+      const menus = this.menu.items
+      let parents = menus.filter(menu => {
+        return menu.parent_id == '0'
+      })
+
+      return parents
     }
   },
   watch: {

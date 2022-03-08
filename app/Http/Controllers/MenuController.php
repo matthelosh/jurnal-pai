@@ -33,6 +33,7 @@ class MenuController extends Controller
                     'id' => $request->id ?? null,
                 ],
                 [
+                    'parent_id' => $request->parent_id ?? null,
                     'label'=>$request->label,
                     'icon' => $request->icon,
                     'url' => $request->url,

@@ -3,6 +3,17 @@ require('./bootstrap');
 import Vue from 'vue'
 import vuetify from './plugins/vuetify'
 import { createInertiaApp, Link } from '@inertiajs/inertia-vue'
+import { InertiaProgress}  from '@inertiajs/progress'
+import VueQuillEditor from 'vue-quill-editor'
+import ImageResize from 'quill-image-resize-module'
+Quill.register('modules/imageResize', ImageResize)
+
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+
+Vue.use(VueQuillEditor)
+
 Vue.component('inertia-link', Link)
 createInertiaApp({
     resolve: name => require(`./Pages/${name}`),

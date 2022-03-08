@@ -13,7 +13,7 @@
                     ref="calendar"
                     v-model="value"
                     color="primary"
-                    type="4day"
+                    type="month"
                     :events="events"
                     :event-color="getEventColor"
                     :event-ripple="false"

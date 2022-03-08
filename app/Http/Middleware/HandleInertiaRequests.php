@@ -44,7 +44,9 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'user' => Auth::user() ? $this->user($request) : 'null',
-            'menus' => $request->user() ? Menu::where('role','LIKE', '%'.$request->user()->role.'%')->get() : null,
+            'menus' => $request->user() ? Menu::where('role','LIKE', '%'.$request->user()->role.'%')->where('parent_id',0)->with('subs', function($q) use ($request){
+                $q->where('role','LIKE','%'.$request->user()->role.'%');
+            })->get() : null,
             'periode' => Periode::where('active',1)->first(),
             'sekolah' => Auth::user() ? $this->sekolah($request->user()) : null,
         ]);

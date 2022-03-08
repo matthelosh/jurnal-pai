@@ -19,11 +19,11 @@ class CreateJurnalsTable extends Migration
             $table->string('sekolah_id', 20);
             $table->string('guru_id', 30);
             $table->string('rombel_id', 20);
-            $table->string('kd_id', 4);
+            $table->string('kd_id', 100);
             $table->string('hari', 10);
             $table->date('tanggal');
             $table->string('tema', 191);
-            $table->string('absensi_siswa', 3);
+            $table->string('absensi_siswa', 100);
             $table->string('catatan', 191);
             $table->text('teks');
             $table->timestamps();

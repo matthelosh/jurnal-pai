@@ -11,16 +11,20 @@ class DashController extends Controller
 {
     public function index(Request $request)
     {
-        $route = Route::current();
-        $user = User::find($request->id);
-        $name = $route->action['as'];
-        $names = explode('.', $name);
-        $view = '';
-        for ($i=0; $i < count($names); $i++) {
-            $view .= ".".ucfirst($names[$i]);
+        try {
+            $route = Route::current();
+            $user = User::find($request->id);
+            $name = $route->action['as'];
+            $names = explode('.', $name);
+            $view = '';
+            for ($i=0; $i < count($names); $i++) {
+                $view .= ".".ucfirst($names[$i]);
+            }
+            $view = str_replace('.', '/',$view);
+            // dd($view);
+            return Inertia::render('Dashboard/'.ltrim($view, $view[0]));
+        } catch (\Exception $e) {
+            dd($e);
         }
-        $view = str_replace('.', '/',$view);
-        // dd($view);
-        return Inertia::render('Dashboard/'.ltrim($view, $view[0]));
     }
 }

@@ -36,6 +36,11 @@ class Guru extends Model
         return $this->belongsTo(Sekolah::class, 'sekolah_id', 'npsn');
     }
 
+    public function rpes()
+    {
+        return $this->hasMany(Rpe::class, 'guru_id', 'id');
+    }
+
     public static function boot()
     {
         parent::boot();

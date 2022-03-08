@@ -84,9 +84,12 @@ use Inertia\Inertia;
         Route::prefix('guru')->middleware('role:guru')->group(function() {
             Route::group(['prefix' => 'dashboard'], function(){
                 Route::get('/', [DashController::class, 'index'])->name('guru.dashboard');
+                
             });
             Route::group(['prefix' => 'jurnal'], function() {
                 Route::get('/', [DashController::class, 'index'])->name('guru.jurnal');
+                Route::post('/', [JurnalController::class, 'index'])->name('guru.jurnal.index');
+                Route::post('/store', [JurnalController::class, 'store'])->name('guru.jurnal.store');
             });
             Route::group(['prefix' => 'sekolah'], function() {
                 Route::get('/', [DashController::class, 'index'])->name('guru.sekolah');
@@ -96,6 +99,8 @@ use Inertia\Inertia;
 
             Route::group(['prefix' => 'pembelajaran'], function() {
                 Route::post('/', [PembelajaranController::class, 'getByTingkat'])->name('guru.pembelajaran.bytingkat');
+                Route::post('/kd', [KdController::class, 'getByIds'])->name('guru.pembelajaran.kd.byids');
+                Route::post('/pembelajaran/{ke}', [PembelajaranController::class, 'show'])->name('guru.pembelajaran.show');
             });
 
             Route::group(['prefix' => 'agenda'], function() {
@@ -109,9 +114,25 @@ use Inertia\Inertia;
             });
             Route::group(['prefix' => 'rombel'], function() {
                 Route::get('/', [DashController::class, 'index'])->name('guru.rombel');
+                Route::post('/', [RombelController::class, 'index'])->name('guru.rombel.index');
                 Route::post('/store', [RombelController::class, 'store'])->name('guru.rombel.store');
                 Route::post('/{guruId}', [RombelController::class, 'index'])->name('guru.rombel.index');
                 Route::delete('/{id}', [RombelController::class, 'destroy'])->name('guru.rombel.destroy');
             });
+
+            Route::group(['prefix' => 'kaldik'], function() {
+                Route::get('/', [DashController::class, 'index'])->name('guru.kaldik');
+                Route::post('/store', [KaldikController::class, 'store'])->name('guru.kaldik.store');
+                Route::post('/{tapel}', [KaldikController::class, 'byTapel'])->name('guru.kaldik.bytapel');
+            });
+
+            Route::group(['prefix' => 'prota'], function() {
+                Route::post('/{semester}/{tingkat}', [ProtaController::class, 'getByTingkat'])->name('guru.prota.bytingkat');
+            });
+            Route::group(['prefix' => 'prosem'], function() {
+                Route::get('/', [DashController::class, 'index'])->name('guru.prosem');
+            });
+            
+
         });
     });

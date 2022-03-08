@@ -74,11 +74,7 @@
         </v-expand-transition>
         <v-expand-transition>
           <v-col cols="12" v-if="show == 'silabus'">
-            <v-card>
-              <v-card-text>
-                Silabus
-              </v-card-text>
-            </v-card>
+            <silabus></silabus>
           </v-col>
         </v-expand-transition>
       </v-row>

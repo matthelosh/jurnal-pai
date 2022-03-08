@@ -4,11 +4,11 @@
       <v-toolbar>
         <v-btn icon @click="sidebar = !sidebar"><v-icon>mdi-menu</v-icon></v-btn>
         <v-spacer></v-spacer>
-          <v-btn class="btnPrimary mr-3" dark rounded> <v-icon color="white">mdi-printer</v-icon> Cetak </v-btn>
+          <v-btn class="btnPrimary mr-3" dark rounded @click="cetak"> <v-icon color="white">mdi-printer</v-icon> Cetak </v-btn>
       </v-toolbar>
       <v-container>
         <v-col>
-          <v-card>
+          <v-card id="jadwal">
             <v-card-title secondary-title>
                 <v-icon>mdi-calendar-check</v-icon> Jadwal Mengajar Pendidikan Agama Islam
             </v-card-title>
@@ -42,7 +42,7 @@
                 <v-col class="d-flex justify-center" cols="12" sm="4">
                   <span>
                     <p class="text-center my-0">Mengetahui</p>
-                    <p class="text-center">Kepala {{$page.props.user.userable.sekolah.nama_sekolah}}</p>
+                    <p class="text-center">Kepala Sekolah</p>
                     <br>
                     <br>
                     <br>
@@ -53,7 +53,7 @@
                 <v-col class="d-flex justify-center" cols="12" sm="4"></v-col>
                 <v-col class="d-flex justify-center" cols="12" sm="4">
                   <span>
-                    <p class="text-center my-0">Wagir, ..... 2022</p>
+                    <p class="text-center my-0">Wagir, .......................... 2022</p>
                     <p class="text-center">Guru Pendidikan Agama Islam</p>
                     <br>
                     <br>
@@ -108,6 +108,89 @@ export default {
     rombels: []
   }),
   methods: {
+    cetak(){
+      const sheet = document.querySelector('#jadwal').innerHTML
+      let stylesHtml = '';
+      for (const node of [...document.querySelectorAll('link[rel="stylesheet"], style')]) {
+        stylesHtml += node.outerHTML;
+      }
+      let win = window.open('', '','left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0')
+      win.document.write(`
+        <!doctype html>
+        <html>
+          <head>
+            ${stylesHtml}
+            <style>
+              table.kop {
+                border-bottom: 5px double black;
+              }
+              p {
+                font-size: 1em;
+              }
+              .isi table {
+                margin-bottom: 50px;
+              }
+              h3,h4 {
+                color: black!important;
+              }
+              @media print {
+                @page {
+                  size: 8in 13in;
+                }
+                .row {
+                  display:block!important;
+                  text-align: center;
+                }
+                .row div:nth-child(1){
+                  width: 42%;
+                  float: left;
+                }
+                .row div:nth-child(2){
+                  float: left;
+                  width: 16%;
+                }
+                .row div:nth-child(3){
+                  width: 42%;
+                  float: left;
+                }
+
+              }
+            </style>
+            
+          </head>
+          <body>
+            <table width="100%" class="kop">
+              <tr>
+                <td>
+                  <img src="/img/malangkab.png" width="100" />
+                </td>
+                <td style="text-align:center;">
+                  <h3>PEMERINTAH KABUPATEN MALANG</h3>
+                  <h3>DINAS PENDIDIKAN</h3>
+                  <h4>KOORDINATOR WILAYAH DINAS PENDIDIKAN KECAMATAN WAGIR</h4>
+                  <h2>${this.$page.props.user.userable.sekolah.nama_sekolah}</h2>
+                  <p>${ this.$page.props.user.userable.sekolah.alamat }, Telp.: ${this.$page.props.user.userable.sekolah.telp}</p>
+                  <p>, Email: ${this.$page.props.user.userable.sekolah.email}, Website: ${this.$page.props.user.userable.sekolah.website}</p>
+                </td>
+              </tr>
+            </table>
+            <div class="isi">
+              ${sheet}
+            </div>
+          </body>
+        </html>
+      `)
+      // win.document.close()
+      setTimeout(() => {
+        win.print()
+      },500)
+      // win.document.addEventListener("loaded", function(){
+      //   win.print()
+      // })
+      // win.print()
+      
+      // win.close()
+    },
     simpan(){
       if(this.$refs.formJadwal.validate()) {
         this.loading = true

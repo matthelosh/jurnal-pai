@@ -1,5 +1,10 @@
 const mix = require('laravel-mix');
+// let url = process.env.APP_URL.replace(/(^\w+:|^)\/\//, '');
+const fs = require("fs");
+const path = require("path");
 
+const homeDir = process.env.HOME;
+const host = process.env.APP_DOMAIN
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -11,7 +16,31 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js').vue()
+mix
+    .options({
+        devServer: {
+            https: {
+                key: fs.readFileSync(path.resolve(homeDir, `.valet/Certificates/${host}.example.com.key`)).toString(),
+                cert: fs.readFileSync(path.resolve(homeDir, `.valet/Certificates/${host}.example.com.crt`)).toString(),
+                ca: fs.readFileSync(path.resolve(homeDir, `.valet/CA/LaravelValetCASelfSigned.pem`)).toString(),
+            },
+        },
+        hmrOptions: {
+            host: host,
+            port: 8080
+        }
+    })
+    .webpackConfig(webpack => {
+        return {
+            plugins: [
+                new webpack.ProvidePlugin({
+                    'window.Quill': 'quill',
+                    'Quill': 'quill'
+                })
+            ]
+        };
+    })
+    .js('resources/js/app.js', 'public/js').vue()
     .postCss('resources/css/app.css', 'public/css', [
         //
     ])

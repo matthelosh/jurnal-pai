@@ -12,5 +12,15 @@ class PembelajaranService  {
     $pembelajarans = Pembelajaran::where('tingkat', $tingkat)->get();
     return $pembelajarans;
   }
+
+  public function show($ke, $tingkat)
+  {
+    $pembelajaran = Pembelajaran::where([
+      ['ke','=',$ke],
+      ['tingkat', '=',$tingkat]
+    ])->first();
+
+    return $pembelajaran;
+  }
   
 }

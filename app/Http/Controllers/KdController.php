@@ -17,6 +17,19 @@ class KdController extends Controller
         //
     }
 
+    public function getByIds(Request $request)
+    {
+        try {
+            $tingkat = $request->query('tingkat');
+            $kds = Kd::where('tingkat', $request->query('tingkat'))->whereIn('kode_kd', $request->kds)->with('indikators', function($q) use ($tingkat) {
+                $q->where('tingkat', $tingkat);
+            })->get();
+            return response()->json(['success' => true, 'kds' => $kds], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'msg' => $th->getMessage()], 500);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *

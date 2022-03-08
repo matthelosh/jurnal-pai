@@ -18,6 +18,8 @@ class PerangkatController extends Controller
             case "pembelajaran":
                 return $data = ['pembelajarans' => PerangkatFacade::getPbl()];
                 break;
+            case "indikator":
+                return $data = ['indikators' => PerangkatFacade::getIndikator($request->query('tingkat'), $request->kds)];
 
         }
 
