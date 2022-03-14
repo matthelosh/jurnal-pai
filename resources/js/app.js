@@ -12,7 +12,11 @@ import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 
+import moment from 'moment'
+import { VSubheader } from 'vuetify/lib';
+
 Vue.use(VueQuillEditor)
+Vue.use(moment)
 
 Vue.component('inertia-link', Link)
 createInertiaApp({

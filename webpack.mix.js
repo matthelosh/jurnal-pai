@@ -17,19 +17,6 @@ const host = process.env.APP_DOMAIN
  */
 
 mix
-    .options({
-        devServer: {
-            https: {
-                key: fs.readFileSync(path.resolve(homeDir, `.valet/Certificates/${host}.example.com.key`)).toString(),
-                cert: fs.readFileSync(path.resolve(homeDir, `.valet/Certificates/${host}.example.com.crt`)).toString(),
-                ca: fs.readFileSync(path.resolve(homeDir, `.valet/CA/LaravelValetCASelfSigned.pem`)).toString(),
-            },
-        },
-        hmrOptions: {
-            host: host,
-            port: 8080
-        }
-    })
     .webpackConfig(webpack => {
         return {
             plugins: [

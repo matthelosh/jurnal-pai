@@ -10,10 +10,10 @@
         <v-col>
           <v-card id="jadwal">
             <v-card-title secondary-title>
-                <v-icon>mdi-calendar-check</v-icon> Jadwal Mengajar Pendidikan Agama Islam
+                <v-icon>mdi-calendar-check</v-icon> Jadwal Mengajar Pendidikan Agama Islam {{ start }}
             </v-card-title>
             <v-card-text>
-              <table border="1" width="100%" id="tableJadwal">
+              <!-- <table border="1" width="100%" id="tableJadwal">
                 <thead>
                   <tr>
                     <th>Jam Ke</th>
@@ -36,8 +36,29 @@
                     <td :class="(jadwal.sabtu && jadwal.sabtu != 'Istirahat')? 'primary lighten-'+jadwal.sabtu.kode_rombel.substr(-1): ((jadwal.sabtu && jadwal.sabtu == 'Istirahat') ? 'istirahat' : '')" @click="edit({hari:'Sabtu', rombel_id:jadwal.sabtu?jadwal.sabtu.kode_rombel:null, id: jadwal.sabtu ? jadwal.sabtu.id:null}, $event)">{{jadwal.sabtu?jadwal.sabtu.nama_rombel:null}}</td>
                   </tr>
                 </tbody>
-              </table>
+              </table> -->
 
+              <v-calendar 
+                type="week"
+                :start="start"
+                :end="end"
+                interval-count="10" 
+                interval-minutes="35"
+                first-interval="0" 
+                first-time="07:00"
+                locale="id"
+                @click:time="tes"
+                :weekdays="[1,2,3,4,5,6]"
+                :events="parsedEvents"
+              >
+                <template v-slot:day-label-header="{}" >-</template>
+                <template v-slot:event="{event}">
+                  <span class="text-center">
+                    <h2>{{ event.mapel }}</h2>
+                    <h3>{{ event.rombel }}</h3>
+                  </span>
+                </template>
+              </v-calendar>
               <v-row class="my-5">
                 <v-col class="d-flex justify-center" cols="12" sm="4">
                   <span>
@@ -84,6 +105,83 @@
           </v-card-text>
         </v-card>
       </v-dialog>
+      <v-dialog v-model="selectedJadwal.show" v-if="selectedJadwal.show" max-width="600">
+        <v-card>
+          <v-card-title>
+            Jadwal
+            <v-spacer></v-spacer>
+            <v-btn small fab color="error" @click="selectedJadwal={show: false, detail: {}}"><v-icon>mdi-close</v-icon></v-btn>
+          </v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-col cols="6">
+                <v-select :items="rombels" v-model="selectedJadwal.jadwal.rombel" item-text="nama_rombel" item-value="nama_rombel" label="Kelas"></v-select>
+              </v-col>
+              <v-col cols="6">
+                <v-select :items="mapels" v-model="selectedJadwal.jadwal.mapel" label="Mapel"></v-select>
+              </v-col>
+              <v-col cols="4">
+                <v-menu
+                  ref="menuStart"
+                  v-model="menu1"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  :return-value.sync="selectedJadwal.jadwal.start"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="selectedJadwal.jadwal.start"
+                      label="Mulai"
+                      readonly
+                      append-icon="mdi-clock-time-four-outline"
+                      v-bind="attrs"
+                      v-on="on"
+                      
+                    ></v-text-field>
+                  </template>
+                  <v-time-picker v-if="menu1" v-model="selectedJadwal.jadwal.start" min="07:00" end="12:15" format="24hr" label="Mulai" @click:minute="$refs.menuStart.save(selectedJadwal.jadwal.start)"></v-time-picker>
+                </v-menu>
+              </v-col>
+              <v-col cols="4">
+                <v-menu
+                  ref="menuEnd"
+                  v-model="menu2"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  :return-value.sync="selectedJadwal.jadwal.end"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="selectedJadwal.jadwal.end"
+                      label="Selesai"
+                      readonly
+                      append-icon="mdi-clock-time-four-outline"
+                      v-bind="attrs"
+                      v-on="on"
+                      
+                    ></v-text-field>
+                  </template>
+                  <v-time-picker v-if="menu2" v-model="selectedJadwal.jadwal.end" min="07:00" end="12:15" format="24hr" label="Mulai" @click:minute="$refs.menuEnd.save(selectedJadwal.jadwal.end)"></v-time-picker>
+                </v-menu>
+              </v-col>
+              <v-col cols="4">
+                <v-color-picker v-if="selectedJadwal.jadwal" v-model="selectedJadwal.jadwal.color" hide-inputs></v-color-picker>
+              </v-col>
+              <v-col cols="12">
+                <v-btn @click="simpanJadwal" color="primary">Simpan</v-btn>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
     </div>
   </dash-layout>
 </template>
@@ -92,10 +190,14 @@
 import DashLayout from '../../../Layout/DashLayout'
 import 'vue-daily-scheduler/dist/vue-schedule.min.css'
 import VueSchedule from 'vue-daily-scheduler'
+import moment from 'moment'
 export default {
   name: 'GuruRombel',
   components: { DashLayout,VueSchedule },
   data: () => ({
+    time: null,
+    menu1: false,
+    menu2: false,
     loading: false,
     form: false,
     jadwals: [],
@@ -105,9 +207,49 @@ export default {
     mulai: new Date().setHours(7,0),
     durasi: 35,
     interval: 10,
-    rombels: []
+    rombels: [],
+    mapels: ['Tematik', 'PAI', 'PJOK','IPA','IPS','MTK', 'B.IND', 'B.DAE','B.ING'],
+    selectedJadwal: { show: false, detail: null},
+    events: [
+      {
+        start: '10:20',
+        end: '12:15',
+        mapel: 'PAI',
+        rombel: 'Kelas 1',
+        hari: 1,
+        color: '#789878'
+      },
+      {
+        start: '07:00',
+        end: '09:20',
+        mapel: 'PAI',
+        rombel: 'Kelas 2',
+        hari: 2,
+        color: '#98feff'
+      },
+    ],
+    startWeek: null,
+    endWEek: null
   }),
   methods: {
+    simpanJadwal(){
+      let jadwal = this.selectedJadwal.jadwal
+      let events = this.events
+      console.log(jadwal)
+      events.push(jadwal)
+      this.events = events
+    },
+    tes(e) {
+      let detail = e
+      let jadwal  = {
+        start: e.time,
+        end: '',
+        mapel: '',
+        rombel: '',
+        color: '#897867'
+      }
+      this.selectedJadwal = { show: true, jadwal: jadwal}
+    },
     cetak(){
       const sheet = document.querySelector('#jadwal').innerHTML
       let stylesHtml = '';
@@ -301,9 +443,27 @@ export default {
       })
 
       return jadwals
+    },
+    start(){
+      return moment().weekday(1).format('YYYY-MM-DD')
+    },
+    end(){
+      return moment().weekday(6).format('YYYY-MM-DD')
+    },
+    parsedEvents() {
+      let jadwals = []
+      this.events.forEach(item => {
+        let date = moment().weekday(item.hari).format('YYYY-MM-DD')
+        item.start = date+' '+item.start
+        item.end = date+' '+item.end
+        jadwals.push(item)
+      })
+
+      return jadwals
     }
   },
   mounted() {
+    // this.getEvents()
     this.getMyRombels()
     this.getJadwals()
     this.getJams()

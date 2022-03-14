@@ -126,6 +126,14 @@ use Inertia\Inertia;
                 Route::post('/{tapel}', [KaldikController::class, 'byTapel'])->name('guru.kaldik.bytapel');
             });
 
+            Route::group(['prefix' => 'hari-efektif'], function() {
+                Route::get('/', [DashController::class, 'index'])->name('guru.hariefektif');
+            });
+
+            Route::group(['prefix' => 'rpe'], function(){
+                Route::post('/', [RpeController::class, 'index'])->name('guru.rpe.index');
+            });
+
             Route::group(['prefix' => 'prota'], function() {
                 Route::post('/{semester}/{tingkat}', [ProtaController::class, 'getByTingkat'])->name('guru.prota.bytingkat');
             });

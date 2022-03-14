@@ -27,7 +27,7 @@ class KaldikService {
         'name' => $input['name'],
         'start' => $input['start'],
         'tapel' => $input['tapel'],
-        'color' => $input['color']['hexa']
+        'color' => $input['color']['hexa'] ?? $input['color']
       ]
       );
     return $kaldik;

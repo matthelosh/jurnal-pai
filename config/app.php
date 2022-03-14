@@ -233,6 +233,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Prota' => App\Facades\Prota::class,
         'Kaldik' => App\Facades\Kaldik::class,
+        'Rpe' => App\Facades\Rpe::class,
 
     ],
 

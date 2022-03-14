@@ -12,7 +12,7 @@
                 <h3><v-icon>mdi-calendar</v-icon>{{ months[bulan-1] }} {{( parseInt(bulan) > 6) ? $page.props.periode.tapel.split('-')[0] : $page.props.periode.tapel.split('-')[1]}}</h3>
                 <v-divider class="my-3"></v-divider>
                 <v-sheet>
-                  <v-calendar type="month" locale="id" :start="( parseInt(bulan) > 6 ? $page.props.periode.tapel.split('-')[0] : $page.props.periode.tapel.split('-')[1])+'-'+bulan+'-'+'01'" @click:date="addEvent" :now="sekarang" :events="events" @click:event="showEvent" color="primary" >
+                  <v-calendar type="month" locale="id" :start="( parseInt(bulan) > 6 ? $page.props.periode.tapel.split('-')[0] : $page.props.periode.tapel.split('-')[1])+'-'+bulan+'-'+'01'" @click:date="addEvent" :now="sekarang" :events="events" @click:event="showEvent" color="primary" show-week >
                   </v-calendar>
                 </v-sheet>
               </v-card-text>
@@ -64,7 +64,7 @@
           <v-expand-transition>
             <v-row v-if="editEvent">
               <v-col>
-                <v-color-picker :value="selectedEvent.color" hide-mode-switch hide-sliders  hide-inputs  ></v-color-picker>
+                <v-color-picker v-model="selectedEvent.color" hide-mode-switch  hide-inputs  ></v-color-picker>
               </v-col>
             </v-row>
           </v-expand-transition>
